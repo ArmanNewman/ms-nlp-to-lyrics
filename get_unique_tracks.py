@@ -21,6 +21,25 @@ deduped_tracks["search_term"] = (
 )
 deduped_tracks["search_term"] = deduped_tracks.search_term.str.lower()
 
-deduped_tracks.to_clipboard(index=False)
 deduped_tracks.to_pickle("deduped_tracks.pickle")
-deduped_tracks.to_csv("deduped_tracks.csv", index=False)
+
+csv_destination = "deduped_tracks.csv"
+# Check if the destination exists. If not, create it, else append
+file_exists = os.path.exists(csv_destination)
+if not file_exists:
+    mode = "w"
+    header = True
+    deduped_tracks.to_csv(csv_destination, mode=mode, index=False, header=header)
+    print(f"Destination {csv_destination} created")
+else:
+    mode = "a"
+    header = False
+    old_db = pd.read_csv(csv_destination)
+    # Select only new songs
+    new_tracks = deduped_tracks.loc[~deduped_tracks.uri.isin(old_db.uri)]
+    # Check if there are any new records to append
+    if not new_tracks.empty:
+        new_tracks.to_csv(csv_destination, mode=mode, index=False, header=header)
+        print(f"Appended {new_tracks.shape[0]} to {csv_destination}")
+    else:
+        print("Nothing new to append.")
