@@ -11,9 +11,7 @@ mtdta = pd.read_pickle("genius_metadata.pickle")
 lyrics_df = pd.read_pickle("lyrics.pickle")
 
 # Join metadata with lyrics
-mtd_lyrics = mtdta.loc[:, ["search_term", "url"]].merge(
-    lyrics_df, how="left", on="url", validate="1:1"
-)
+mtd_lyrics = mtdta.loc[:, ["search_term", "url"]].merge(lyrics_df, how="left", on="url")
 
 track_lyrics = tracks.merge(mtd_lyrics, how="left", on="search_term", validate="m:1")
 

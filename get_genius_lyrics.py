@@ -37,7 +37,7 @@ for i, row in new_tracks.iterrows():
     if lyrics_record:
         lyrics_list.append(lyrics_record)
     elif not lyrics_record:
-        print(i, row["url"], "Does not have lyrics in Genius site")
+        print(row["url"], "Does not have lyrics in Genius site")
 
 lyrics_df = pd.DataFrame(lyrics_list)
 
