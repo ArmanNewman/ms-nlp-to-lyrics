@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import pandas as pd
 
 # Print some stats or info for logging
@@ -16,7 +17,7 @@ mtd_lyrics = mtdta.loc[:, ["search_term", "url"]].merge(lyrics_df, how="left", o
 track_lyrics = tracks.merge(mtd_lyrics, how="left", on="search_term", validate="m:1")
 
 # Clean the data to replace empty strings with NaN or Nulls
-track_lyrics.loc[track_lyrics.lyrics == "", "lyrics"] = pd.NA
+track_lyrics.loc[track_lyrics.lyrics == "", "lyrics"] = np.nan
 
 # Write results
 destination = "deduped_tracks_lyrics.pickle"
