@@ -4,6 +4,7 @@ from requests_html import HTMLSession
 from bs4 import BeautifulSoup
 import pandas as pd
 
+
 # 1) API Chart Lyrics is not good enough. Many tracks missing
 # 2) API Genius seems to be good
 def get_genius_metadata(s: HTMLSession, search_term: str) -> Optional[pd.DataFrame]:
@@ -60,9 +61,7 @@ def get_lyrics(s: HTMLSession, lyrics_url: str) -> Optional[Dict[str, str]]:
     if lyrics_r.status_code == 200:
         lyrics_s = lyrics_r.content.decode("utf-8")
         soup = BeautifulSoup(lyrics_s, "html.parser")
-        lyrics_divs = soup.find_all(
-            "div", class_="Lyrics__Container-sc-1ynbvzw-6 YYrds"
-        )
+        lyrics_divs = soup.find_all("div", {"data-lyrics-container": "true"})
         lyrics_parts = []
         for div in lyrics_divs:
             lyrics_i = div.get_text("\n")
@@ -76,9 +75,11 @@ if __name__ == "__main__":
     s = HTMLSession()
 
     # Test get metadata from Genius API
-    sample_metadata = get_genius_metadata(s=s, search_term="the weeknd save your tears")
-    print(sample_metadata)
+    # sample_metadata = get_genius_metadata(s=s, search_term="the weeknd save your tears")
+    # print(sample_metadata)
 
     # Retrieve the Lyrics
-    lyrics = get_lyrics(s=s, lyrics_url=sample_metadata.url[0])
+    # lyrics = get_lyrics(s=s, lyrics_url=sample_metadata.url[0])
+    url = "https://genius.com/Karol-g-and-shakira-tqg-lyrics"
+    lyrics = get_lyrics(s=s, lyrics_url=url)
     print(lyrics)
