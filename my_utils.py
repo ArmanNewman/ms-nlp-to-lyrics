@@ -1,3 +1,4 @@
+import os
 import re
 import json
 import urllib.parse
@@ -5,6 +6,8 @@ from typing import Dict, Optional
 from requests_html import HTMLSession
 from bs4 import BeautifulSoup
 import pandas as pd
+
+rapidApi_key = os.environ["RAPID_API_KEY"]
 
 
 # 1) API Chart Lyrics is not good enough. Many tracks missing
@@ -109,7 +112,7 @@ def test_lyrics_api(s: HTMLSession, title: str, artist: str):
     search_payload = f"q={title_parsed}&country=US&shelf=song"
     headers = {
         "content-type": "application/x-www-form-urlencoded",
-        "X-RapidAPI-Key": "79857f22b0mshe67e52799733488p1f037ejsnb95a6677e205",
+        "X-RapidAPI-Key": rapidApi_key,
         "X-RapidAPI-Host": "worldwide-songs-and-lyrics.p.rapidapi.com",
     }
 
