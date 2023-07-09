@@ -1,4 +1,5 @@
 import os
+import my_utils
 import pandas as pd
 
 os.chdir("mx_charts_csvs")
@@ -19,7 +20,10 @@ print(f"Total unique tracks: {deduped_tracks.shape[0]}")
 
 # Simplify the search term
 main_artist = deduped_tracks.artist_names.apply(lambda x: x.split(",")[0])
-simplified_title = deduped_tracks.track_name.apply(lambda x: x.split(" - ")[0])
+
+# Clean featurings inside parenthesis or brackets
+simplified_title = deduped_tracks.track_name.apply(my_utils.simplify_track_title)
+
 deduped_tracks["search_term"] = simplified_title + " by " + main_artist
 deduped_tracks["search_term"] = deduped_tracks.search_term.str.lower()
 
