@@ -5,7 +5,7 @@ from requests_html import HTMLSession
 import pandas as pd
 
 
-def get_lyrics_for_charting_tracks() -> None:
+def get_lyrics_for_charting_tracks(chart_type: str) -> None:
     """Executes the retrieval of lyrics for charting tracks considering 3 scenarios:
     - Case 1: There is no prior data, so all is new (OK)
     - Case 2: There is old data, the new data has NO lyrics updates (OK)
@@ -18,8 +18,9 @@ def get_lyrics_for_charting_tracks() -> None:
 
     rapidapi_key = os.environ.get("RAPID_API_KEY")
 
-    input_charts = pd.read_csv("deduped_tracks.csv")
-    destination = "chart_lyrics.pickle"
+    chart_suffix = {"old": "", "new": "_new"}[chart_type]
+    input_charts = pd.read_csv(f"deduped_tracks{chart_suffix}.csv")
+    destination = f"chart_lyrics{chart_suffix}.pickle"
 
     # Check if the destination exists to prevent querying twice
     destination_exists = os.path.exists(destination)
@@ -114,4 +115,5 @@ def get_lyrics_for_charting_tracks() -> None:
 
 
 if __name__ == "__main__":
-    get_lyrics_for_charting_tracks()
+    # get_lyrics_for_charting_tracks(chart_type="old")
+    get_lyrics_for_charting_tracks(chart_type="new")
